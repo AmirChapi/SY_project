@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}מערכת הערכת סיכון{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <h1>VeriCall - אימות מבוסס סיכון במוקד שירות בנקאי</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">בית</a>
+      <a href="{{ url_for('compare') }}">הבעיה והפתרון</a>
+      {% if current_agent %}
+        <a href="{{ url_for('dashboard') }}">סימולטור חי</a>
+        <a href="{{ url_for('analytics_dashboard') }}">ניתוח דפוסים</a>
+        <a href="{{ url_for('audit_log_view') }}">יומן ביקורת</a>
+        <a href="{{ url_for('new_call') }}">תיעוד ידני</a>
+        <a href="{{ url_for('calls_list') }}">רשימת שיחות</a>
+        <span class="agent-badge">שלום {{ current_agent }}</span>
+        <a href="{{ url_for('logout') }}">התנתקות</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">התחברות</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>פרויקט גמר - סייבר ומערכות מידע</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

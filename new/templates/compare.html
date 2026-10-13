@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}מה קיים היום מול VeriCall{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>הבעיה: דילמת האימות במוקד בנקאי מאויש</h2>
+  <p>
+    הנציג שומע קול - לא רואה תעודה. תוקף שאסף פרטים (דליפה, רשתות חברתיות, Phishing) עונה נכון על שאלות ידע.
+    הפתרונות הקיימים בשוק נמצאים בשני קצוות: <strong>חלש מדי</strong> או <strong>כבד מדי</strong>.
+  </p>
+</section>
+
+<section class="compare-grid">
+  <div class="compare-col weak">
+    <div class="compare-tag">קיים היום - רוב המוקדים</div>
+    <h3>A. אימות ידע קבוע</h3>
+    <p class="compare-sub">ת"ז + שאלות זיהוי, זהה לכל שיחה</p>
+    <ul>
+      <li>⏱ זמן אימות: <strong>~30 שנ'</strong></li>
+      <li>😊 חיכוך ללקוח: <strong>נמוך</strong></li>
+      <li>🛡 תפיסת התחזות: <strong>נמוכה</strong> - הפרטים כבר לא סודיים</li>
+      <li>🎭 הנדסה חברתית: <strong>חשוף</strong> - הנציג הוא היעד</li>
+    </ul>
+    <p class="compare-cite">הנדסה חברתית מנצלת את החוליה האנושית ועוקפת הגנות טכנולוגיות.</p>
+  </div>
+
+  <div class="compare-col heavy">
+    <div class="compare-tag">קיים היום - בנקים "מוקשחים"</div>
+    <h3>B. אימות חזק קבוע לכולם</h3>
+    <p class="compare-sub">OTP / Token בכל שיחה, גם לבירור יתרה</p>
+    <ul>
+      <li>⏱ זמן אימות: <strong>~90 שנ'</strong> (+200%)</li>
+      <li>😣 חיכוך ללקוח: <strong>גבוה</strong> - גם ל-99% הלגיטימיים</li>
+      <li>🛡 תפיסת התחזות: <strong>גבוהה</strong></li>
+      <li>📉 השלמת שיחות: <strong>יורדת</strong></li>
+    </ul>
+    <p class="compare-cite">אימות דו-שלבי נתפס בטוח יותר, אך עלול להיות <em>פחות נוח ואיטי יותר</em>.</p>
+  </div>
+
+  <div class="compare-col vericall">
+    <div class="compare-tag highlight">הפתרון המוצע</div>
+    <h3>C. VeriCall - RBA לערוץ הקולי</h3>
+    <p class="compare-sub">אותות הקשר בזמן ההמתנה → ציון מדורג → חיכוך רק כשיש הצדקה</p>
+    <ul>
+      <li>⏱ זמן אימות: <strong>~30 שנ'</strong> ברוב השיחות, +Step-Up רק בחשד</li>
+      <li>😊 חיכוך ללקוח: <strong>נמוך</strong> לרוב, מדורג לחשודים</li>
+      <li>🛡 תפיסת התחזות: <strong>גבוהה</strong> - צירוף אותות, לא ידע בלבד</li>
+      <li>🧭 תמיכה בנציג: <strong>רמה + גורמים + פעולות מותרות</strong></li>
+    </ul>
+    <p class="compare-cite">RBA מוכח בערוצים דיגיטליים, אך עדיין חסר פתרון ממוקד לערוץ קולי מאויש. זה הפער שהמערכת ממלאת.</p>
+  </div>
+</section>
+
+<section class="card">
+  <h2>ה-X-Factor - מה VeriCall עושה שהשוק לא</h2>
+  <div class="xfactor-grid">
+    <div class="xfactor"><span class="xf-num">1</span><strong>Shift-Left לזמן ההמתנה</strong><br>הסיכון מחושב בשלב ה-IVR - לפני שהנציג עונה. זמן "מת" הופך לשלב אבטחה.</div>
+    <div class="xfactor"><span class="xf-num">2</span><strong>מדורג, לא בינארי</strong><br>נמוך → רגיל · בינוני → Step-Up · גבוה → עצירה והסלמה.</div>
+    <div class="xfactor"><span class="xf-num">3</span><strong>Step-Up בערוץ בלתי-תלוי</strong><br>Push לאפליקציה הרשומה - לא למספר המתקשר, כי הוא עצמו חשוד.</div>
+    <div class="xfactor"><span class="xf-num">4</span><strong>תמיכה בהחלטה + Audit</strong><br>הנציג מחליט, המערכת מגבילה פעולות ומתעדת. לא מחליפה שיקול דעת.</div>
+    <div class="xfactor"><span class="xf-num">5</span><strong>כיול, לא קבועים</strong><br>משקלים וספים בטבלה - מותאמים לנתוני המוקד.</div>
+  </div>
+  <p class="hint">הערכים המספריים בעמודות A/B/C הם ערכי הדגמה להמחשת ה-Trade-off שתועד בספרות, לא מדידה אמפירית.</p>
+  {% if current_agent %}
+  <a class="btn" href="{{ url_for('dashboard') }}">לסימולטור החי</a>
+  {% else %}
+  <a class="btn" href="{{ url_for('login') }}">התחברות לסימולטור →</a>
+  {% endif %}
+</section>
+{% endblock %}

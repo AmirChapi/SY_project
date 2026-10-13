@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}יומן ביקורת{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>יומן ביקורת (Audit Log)</h2>
+  <p class="hint">
+    כל החלטת מערכת וכל פעולת נציג מתועדות - לתחקור אירועים, בקרה ושיפור הכיול.
+    מכיל מידע רגיש: הגישה מוגבלת לנציגים מחוברים בלבד.
+  </p>
+  <table>
+    <thead>
+      <tr><th>#</th><th>זמן</th><th>שיחה</th><th>לקוח</th><th>גורם</th><th>פעולה</th><th>פירוט</th></tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.audit_id }}</td>
+        <td>{{ r.logged_at }}</td>
+        <td>{% if r.call_id %}<a href="{{ url_for('call_result', call_id=r.call_id) }}">{{ r.call_id }}</a>{% else %}-{% endif %}</td>
+        <td>{{ r.full_name or "-" }}</td>
+        <td><span class="badge">{{ r.actor }}</span></td>
+        <td>{{ r.action }}</td>
+        <td>{{ r.details }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">אין רשומות עדיין</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

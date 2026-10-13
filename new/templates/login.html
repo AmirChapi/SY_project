@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}התחברות{% endblock %}
+{% block content %}
+<section class="card login-card">
+  <h2>התחברות למערכת</h2>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <form method="POST">
+    <label>שם משתמש
+      <input type="text" name="username" required autofocus>
+    </label>
+    <label>סיסמה
+      <input type="password" name="password" required>
+    </label>
+    <button type="submit" class="btn">כניסה</button>
+  </form>
+  <p class="hint">משתמש להדגמה: agent / 1234</p>
+</section>
+{% endblock %}

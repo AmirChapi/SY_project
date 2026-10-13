@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}לוח בקרה חי{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>לוח בקרה - מוקד שירות בנקאי (סימולטור)</h2>
+  <p>
+    כל תרחיש מדמה שיחה נכנסת. בשלב ה-IVR (המתנה) המערכת אוספת אותות ומחשבת סיכון -
+    <strong>לפני שהנציג עונה</strong>. כשהנציג עולה לקו, הציון, הגורמים והפעולות המותרות כבר מוכנים.
+  </p>
+  <div class="scenario-grid">
+    {% for id, sc in scenarios.items() %}
+    <div class="scenario-card">
+      <div class="scenario-icon">{{ sc.icon }}</div>
+      <h3>{{ sc.title }}</h3>
+      <p>{{ sc.description }}</p>
+      <p class="scenario-path">מסלול צפוי: <strong>{{ sc.expected_path }}</strong></p>
+      <form method="POST" action="{{ url_for('dashboard_start', scenario_id=id) }}">
+        <button type="submit" class="btn">קבל שיחה נכנסת</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card">
+  <h2>שיחות פעילות כרגע</h2>
+  <div id="active-calls-board" class="active-board" data-poll-url="{{ url_for('api_dashboard_live') }}">
+    <p class="hint">אין שיחות פעילות כרגע.</p>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='dashboard_live.js') }}"></script>
+{% endblock %}

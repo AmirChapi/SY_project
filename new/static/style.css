@@ -1,0 +1,932 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  color: #1f2933;
+}
+
+.topbar {
+  background: #123456;
+  color: white;
+  padding: 1rem 2rem;
+}
+
+.topbar h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+}
+
+.topbar nav a {
+  color: white;
+  margin-inline-end: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.topbar nav a:hover {
+  text-decoration: underline;
+}
+
+.content {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.checkbox {
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox input {
+  width: auto;
+}
+
+.btn {
+  display: inline-block;
+  background: #123456;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 1rem;
+  margin-inline-end: 0.5rem;
+}
+
+.btn.secondary {
+  background: #6b7280;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.error {
+  color: #b91c1c;
+  font-weight: bold;
+}
+
+.live-score {
+  background: #eef2f7;
+  border-radius: 6px;
+  padding: 0.8rem;
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: right;
+}
+
+table th {
+  background: #eef2f7;
+}
+
+li.active {
+  color: #b91c1c;
+  font-weight: bold;
+}
+
+li.inactive {
+  color: #6b7280;
+}
+
+.result-box {
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.level-נמוך {
+  background: #dcfce7;
+  border: 1px solid #16a34a;
+}
+
+.level-בינוני {
+  background: #fef9c3;
+  border: 1px solid #ca8a04;
+}
+
+.level-גבוה {
+  background: #fee2e2;
+  border: 1px solid #b91c1c;
+}
+
+/* ניווט וסשן */
+.agent-badge {
+  color: #cbd5e1;
+  margin-inline-end: 1rem;
+  font-weight: bold;
+}
+
+.hint {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.badge {
+  display: inline-block;
+  background: #eef2f7;
+  border-radius: 4px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: #374151;
+  margin-inline-start: 0.5rem;
+}
+
+.login-card {
+  max-width: 360px;
+  margin: 2rem auto;
+}
+
+/* דשבורד - כרטיסי תרחישים */
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.scenario-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fafafa;
+}
+
+.scenario-card h3 {
+  margin-top: 0;
+}
+
+.scenario-icon {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+.welcome-line {
+  color: #123456;
+  font-weight: bold;
+}
+
+/* לוח שיחות פעילות */
+.active-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.mini-call-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #e5e7eb;
+  border-inline-start: 6px solid #16a34a;
+  border-radius: 6px;
+  padding: 0.8rem;
+  background: white;
+}
+
+.mini-call-card:hover {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+}
+
+.mini-score {
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+.mini-bar {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+/* מסך שיחה חיה */
+.live-grid {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  align-items: start;
+}
+
+.gauge-wrap {
+  text-align: center;
+  min-width: 0;
+  border: 1px solid #dbe4ec;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.gauge-score {
+  font-size: 3.4rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.gauge-level {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.risk-meter-header,
+.risk-score-row,
+.risk-scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.risk-meter-header {
+  color: #123456;
+  font-size: 0.78rem;
+  font-weight: bold;
+  letter-spacing: 0.08rem;
+  direction: ltr;
+}
+
+.risk-live-label {
+  color: #dc2626;
+  font-size: 0.7rem;
+}
+
+.risk-score-row {
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.risk-score-caption {
+  color: #64748b;
+  text-align: right;
+  font-size: 0.8rem;
+}
+
+.risk-track-wrap {
+  direction: ltr;
+}
+
+.risk-track {
+  position: relative;
+  height: 18px;
+  border-radius: 9px;
+  background: linear-gradient(90deg, #86efac 0 30%, #fde68a 30% 60%, #fca5a5 60% 100%);
+  box-shadow: inset 0 0 0 1px rgba(18, 52, 86, 0.12);
+}
+
+.risk-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  border-radius: 9px;
+  opacity: 0.9;
+  transition: width 0.8s ease, background-color 0.5s ease;
+}
+
+.risk-threshold {
+  position: absolute;
+  top: -7px;
+  width: 2px;
+  height: 32px;
+  background: #123456;
+  color: #123456;
+  font-size: 0.65rem;
+  padding-top: 34px;
+}
+
+.threshold-low { left: 30%; }
+.threshold-high { left: 60%; }
+
+.risk-scale {
+  color: #64748b;
+  font-size: 0.7rem;
+  margin-top: 1.65rem;
+}
+
+.risk-action {
+  margin-top: 1.25rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background: #e2e8f0;
+  color: #334e68;
+  font-weight: bold;
+}
+
+.risk-action.level-נמוך { background: #dcfce7; color: #166534; }
+.risk-action.level-בינוני { background: #fef3c7; color: #92400e; }
+.risk-action.level-גבוה { background: #fee2e2; color: #991b1b; }
+.risk-action.level-low { background: #dcfce7; color: #166534; }
+.risk-action.level-medium { background: #fef3c7; color: #92400e; }
+.risk-action.level-high { background: #fee2e2; color: #991b1b; }
+
+.raw-score-note {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+/* פס שלבי השיחה */
+.phase-strip {
+  display: flex;
+  direction: rtl;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  align-items: stretch;
+}
+
+.phase-step {
+  flex: 1 1 0;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-weight: bold;
+  color: #64748b;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  position: relative;
+}
+
+.phase-step small {
+  font-weight: normal;
+  font-size: 0.75rem;
+}
+
+.phase-num {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.6rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  color: white;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phase-step.done { background: #dcfce7; border-color: #86efac; color: #166534; }
+.phase-step.done .phase-num { background: #16a34a; }
+.phase-step.active { background: #123456; border-color: #123456; color: white; animation: phase-pulse 1.6s infinite; }
+.phase-step.active .phase-num { background: #f59e0b; }
+
+.phase-arrow {
+  color: #94a3b8;
+  align-self: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+@keyframes phase-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(18, 52, 86, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(18, 52, 86, 0); }
+}
+
+.incoming-hint {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+/* אינדיקציות עם מטא-דאטה */
+.indicators-panel li small {
+  display: block;
+  font-weight: normal;
+  color: #7f1d1d;
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+}
+
+/* גריד תחתון - מדיניות + Step-Up */
+.live-lower-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.policy-panel {
+  border: 1px solid #dbe4ec;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.policy-panel h3 { margin-top: 0; }
+
+.policy-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.policy-panel li {
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.policy-panel li.allowed { background: #dcfce7; color: #166534; }
+.policy-panel li.blocked { background: #fee2e2; color: #991b1b; text-decoration: line-through; }
+
+.state-ok { color: #166534; font-weight: bold; }
+.state-blocked { color: #991b1b; font-weight: bold; }
+
+.step-up-box { margin: 0; }
+
+.step-up-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.step-up-actions .btn { margin-top: 0; }
+
+.btn.success { background: #16a34a; }
+.btn.danger { background: #dc2626; }
+
+.step-up-result {
+  margin-top: 0.75rem;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.step-up-result.approved { background: #dcfce7; color: #166534; }
+.step-up-result.failed { background: #fee2e2; color: #991b1b; }
+.step-up-result.pending { color: #92400e; }
+
+/* יומן אירועים */
+.event-log {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  background: #fafafa;
+}
+
+.event-log summary { cursor: pointer; font-weight: bold; color: #123456; }
+
+.event-log ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0 0;
+  font-family: "Consolas", monospace;
+  font-size: 0.82rem;
+  direction: rtl;
+}
+
+.event-log li { padding: 0.2rem 0; border-bottom: 1px dashed #e2e8f0; }
+
+/* דף הבית */
+.hero-tagline { font-size: 1.15rem; color: #123456; font-weight: bold; }
+
+.hero-flow {
+  display: flex;
+  direction: rtl;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  background: #eef2f7;
+  padding: 0.8rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.flow-arrow {
+  color: #1f6f8b;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.hero-actions { display: flex; gap: 0.5rem; }
+
+.scenario-path { font-size: 0.85rem; color: #475569; }
+
+/* מסך השוואה */
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.compare-col {
+  background: white;
+  border-radius: 10px;
+  padding: 1.25rem;
+  border-top: 6px solid #cbd5e1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.compare-col.weak { border-top-color: #f59e0b; }
+.compare-col.heavy { border-top-color: #64748b; }
+.compare-col.vericall { border-top-color: #16a34a; background: #f0fdf4; }
+
+.compare-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  background: #e2e8f0;
+  color: #334e68;
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.compare-tag.highlight { background: #16a34a; color: white; }
+
+.compare-col h3 { margin: 0.2rem 0; }
+.compare-sub { color: #64748b; font-size: 0.9rem; margin-top: 0; }
+.compare-col ul { padding-inline-start: 0; list-style: none; }
+.compare-col li { padding: 0.35rem 0; border-bottom: 1px dashed #e2e8f0; }
+.compare-cite { font-size: 0.8rem; color: #475569; margin-top: 0.75rem; font-style: italic; }
+
+.xfactor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.xfactor {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+  padding-top: 2.2rem;
+  font-size: 0.9rem;
+}
+
+.xf-num {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #123456;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+@media (max-width: 760px) {
+  .live-lower-grid { grid-template-columns: 1fr; }
+  .phase-strip { flex-direction: column; }
+  .phase-arrow { transform: rotate(-90deg); align-self: center; }
+}
+
+.indicators-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.indicators-panel li {
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 4px;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+.indicators-panel {
+  min-width: 0;
+}
+
+.new-indicator {
+  animation: flash-in 1.5s ease;
+}
+
+@keyframes flash-in {
+  0% { transform: scale(1.05); background: #fecaca; }
+  100% { transform: scale(1); }
+}
+
+#call-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#call-controls form {
+  display: inline;
+}
+
+/* אוברליי "שיחה נכנסת" - מוצג לזמן קצר לפני שהמד עולה, ליצירת תחושת שיחה חיה */
+.incoming-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 52, 86, 0.96);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+
+.incoming-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.incoming-phone {
+  font-size: 4rem;
+  animation: ring 0.6s infinite;
+}
+
+@keyframes ring {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); }
+  75% { transform: rotate(-15deg); }
+}
+
+.incoming-number {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.incoming-dots span {
+  animation: blink-dot 1.4s infinite;
+  opacity: 0;
+}
+
+.incoming-dots span:nth-child(2) { animation-delay: 0.2s; }
+.incoming-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink-dot {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* כותרת "שיחת טלפון" - אווטאר, נקודת "פעיל" מהבהבת וטיימר */
+.phone-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.avatar-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #123456;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.phone-header-text {
+  flex-grow: 1;
+}
+
+.phone-header-text h2 {
+  margin: 0 0 0.2rem 0;
+}
+
+.call-verification {
+  color: #475569;
+  font-size: 0.86rem;
+  margin: 0.35rem 0 0;
+}
+
+.call-location {
+  color: #64748b;
+  font-size: 0.78rem;
+  margin: 0.2rem 0 0;
+}
+
+.live-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dc2626;
+  animation: pulse-dot 1.2s infinite;
+  margin-inline-end: 0.3rem;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.call-timer {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: "Consolas", monospace;
+  color: #123456;
+}
+
+/* אנימציית גל קול דקורטיבית שמדמה שיחה חיה */
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 40px;
+  margin: 0.5rem 0 1rem;
+}
+
+.waveform span {
+  display: inline-block;
+  width: 4px;
+  background: #123456;
+  border-radius: 2px;
+  animation: wave 1s ease-in-out infinite;
+}
+
+.waveform span:nth-child(odd) { animation-duration: 0.7s; }
+.waveform span:nth-child(3n) { animation-duration: 1.3s; }
+.waveform span:nth-child(4n) { animation-duration: 0.9s; }
+
+@keyframes wave {
+  0%, 100% { height: 6px; }
+  50% { height: 34px; }
+}
+
+/* קופסת אימות מוגבר (Step-Up OTP) */
+.otp-box,
+.step-up-box {
+  background: #eef2ff;
+  border: 1px solid #6366f1;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.otp-code {
+  font-size: 1.3rem;
+  font-family: "Consolas", monospace;
+  letter-spacing: 0.2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* מסך אנליטיקה */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.summary-card {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.summary-card.danger {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.summary-card.warning {
+  border-color: #ca8a04;
+  background: #fffbeb;
+}
+
+.summary-number {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.summary-label {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.indicator-bars {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.indicator-row-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+  color: #243b53;
+  font-size: 0.92rem;
+}
+
+.indicator-row-heading span {
+  min-width: 0;
+}
+
+.indicator-row-heading strong {
+  color: #123456;
+  flex: 0 0 auto;
+}
+
+.indicator-track {
+  height: 18px;
+  background: #e8eef4;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.indicator-fill {
+  height: 100%;
+  min-width: 10px;
+  border-radius: 9px;
+  background: linear-gradient(90deg, #1f6f8b, #123456);
+  transition: width 0.5s ease;
+}
+
+@media (max-width: 640px) {
+  .live-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .phone-header {
+    align-items: flex-start;
+  }
+
+  .call-timer {
+    font-size: 1.1rem;
+  }
+}
+

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}רשימת שיחות{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>שיחות אחרונות</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>מס' שיחה</th><th>זמן</th><th>סוג</th><th>לקוח</th><th>נציג</th><th>ציון סיכון</th><th>רמה</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in calls %}
+      <tr>
+        <td><a href="{{ url_for('call_result', call_id=c.call_id) }}">{{ c.call_id }}</a></td>
+        <td>{{ c.call_time }}</td>
+        <td>{{ "סימולציה חיה" if c.call_type == "live" else "תיעוד ידני" }}</td>
+        <td>{{ c.full_name }}</td>
+        <td>{{ c.agent_name }}</td>
+        <td>{{ c.total_score if c.total_score is not none else "-" }}</td>
+        <td>{{ c.risk_level or "-" }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">אין שיחות עדיין</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

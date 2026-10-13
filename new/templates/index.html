@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}דף הבית{% endblock %}
+{% block content %}
+<section class="card hero">
+  <h2>VeriCall</h2>
+  <p class="hero-tagline">אימות מבוסס סיכון (RBA) לערוץ הקולי - חיכוך רק כשיש הצדקה</p>
+  <p>
+    במוקד בנקאי מאויש הנציג שומע קול, לא רואה תעודה. אימות ידע קבוע <strong>חלש מדי</strong> מול הנדסה חברתית;
+    אימות חזק קבוע לכולם <strong>כבד מדי</strong> ופוגע בזמן טיפול. VeriCall מנצל את זמן ההמתנה (IVR)
+    לאיסוף אותות הקשר, מחשב ציון סיכון מדורג, ומגיש לנציג החלטה ניתנת לפעולה - <em>לפני</em> שהוא עונה.
+  </p>
+  <div class="hero-flow">
+    <span>📞 שיחה נכנסת</span><span class="flow-arrow">←</span>
+    <span>⏳ IVR: איסוף אותות</span><span class="flow-arrow">←</span>
+    <span>📊 Risk Score</span><span class="flow-arrow">←</span>
+    <span>🧭 נציג: רמה + גורמים + פעולות</span><span class="flow-arrow">←</span>
+    <span>🔐 Step-Up / הסלמה</span>
+  </div>
+  <div class="hero-actions">
+    <a class="btn secondary" href="{{ url_for('compare') }}">הבעיה מול השוק</a>
+    {% if current_agent %}
+    <a class="btn" href="{{ url_for('dashboard') }}">לסימולטור החי</a>
+    {% else %}
+    <a class="btn" href="{{ url_for('login') }}">התחברות לסימולטור</a>
+    {% endif %}
+  </div>
+  {% if current_agent %}<p class="welcome-line">שלום {{ current_agent }}, המערכת מוכנה לניטור השיחות.</p>{% endif %}
+</section>
+{% endblock %}

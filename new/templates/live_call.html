@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}שיחה חיה - {{ status.scenario_title }}{% endblock %}
+{% block content %}
+
+<div id="incoming-call-overlay" class="incoming-overlay">
+  <div class="incoming-phone">📞</div>
+  <h2>שיחה נכנסת למוקד</h2>
+  <p class="incoming-number">{{ status.phone_display }}</p>
+  <p class="incoming-dots">הלקוח בהמתנה / IVR<span>.</span><span>.</span><span>.</span></p>
+  <p class="incoming-hint">VeriCall אוסף אותות ומחשב סיכון <strong>לפני</strong> שהנציג עונה</p>
+</div>
+
+<section
+  class="card live-call-card"
+  data-call-key="{{ call_key }}"
+  data-status-url="{{ url_for('api_live_call', call_key=call_key) }}"
+  data-step-up-url="{{ url_for('api_step_up_resolve', call_key=call_key, result='RESULT') }}"
+>
+  <div class="phase-strip" id="phase-strip">
+    <div class="phase-step" data-phase="ivr"><span class="phase-num">1</span>IVR / המתנה<small>איסוף אותות</small></div>
+    <span class="phase-arrow">←</span>
+    <div class="phase-step" data-phase="agent"><span class="phase-num">2</span>נציג ענה<small>ציון מוכן על המסך</small></div>
+    <span class="phase-arrow">←</span>
+    <div class="phase-step" data-phase="step_up"><span class="phase-num">3</span>Step-Up<small>Push לאפליקציה רשומה</small></div>
+    <span class="phase-arrow">←</span>
+    <div class="phase-step" data-phase="resolved"><span class="phase-num">4</span>הכרעה<small>הציון תוקן</small></div>
+  </div>
+
+  <div class="phone-header">
+    <div class="avatar-circle">{{ status.customer_name[:1] }}</div>
+    <div class="phone-header-text">
+      <h2>{{ status.scenario_title }}</h2>
+      <p><span class="live-dot"></span> <span id="phase-label">בהמתנה</span> | לקוח: {{ status.customer_name }} | נציג: {{ status.agent_name }}</p>
+      <p class="call-verification">מספר מתקשר: {{ status.phone_display }} · {{ status.caller_number_status }}</p>
+      <p class="call-location">IVR: {{ status.ivr_status }} · מקור מיקום: {{ status.location_source }}</p>
+    </div>
+    <div class="call-timer" id="call-timer">00:00</div>
+  </div>
+
+  <div class="waveform" id="waveform">{% for i in range(24) %}<span></span>{% endfor %}</div>
+
+  <div class="live-grid">
+    <div class="gauge-wrap">
+      <div class="risk-meter-header">
+        <span>Risk Monitor</span>
+        <span class="risk-live-label"><span class="live-dot"></span> LIVE</span>
+      </div>
+      <div class="risk-score-row">
+        <div class="gauge-score" id="gauge-score">0</div>
+        <div class="risk-score-caption">מתוך 100<br><span id="gauge-level">ממתין לנתונים...</span></div>
+      </div>
+      <div class="risk-track-wrap">
+        <div class="risk-track">
+          <div class="risk-progress-fill" id="risk-progress-fill"></div>
+          <span class="risk-threshold threshold-low">30</span>
+          <span class="risk-threshold threshold-high">60</span>
+        </div>
+        <div class="risk-scale"><span>רגיל</span><span>אימות נוסף</span><span>עצירה והסלמה</span></div>
+      </div>
+      <div class="risk-action" id="risk-action">אוסף נתוני שיחה...</div>
+      <div class="raw-score-note hidden" id="raw-score-note"></div>
+    </div>
+
+    <div class="indicators-panel">
+      <h3>אינדיקציות שהתגלו</h3>
+      <ul id="indicators-list"></ul>
+      <p class="hint" id="indicators-empty">עדיין לא זוהו סימני אזהרה.</p>
+    </div>
+  </div>
+
+  <div class="live-lower-grid">
+    <div class="policy-panel">
+      <h3>פעולות מותרות לנציג ברמה זו</h3>
+      <p class="hint">הלקוח ביקש: <strong id="requested-action-label">-</strong> → <span id="requested-action-state">-</span></p>
+      <ul id="policy-list"></ul>
+    </div>
+
+    <div id="step-up-box" class="step-up-box hidden">
+      <h3>🔐 Step-Up Authentication</h3>
+      <p id="step-up-channel"></p>
+      <p class="hint">הבקשה נשלחה לערוץ הרשום של הלקוח - <strong>לא</strong> למספר שממנו הוא מתקשר, כדי שתוקף שהשיג את המספר לא יוכל לאשר בעצמו.</p>
+      <p class="step-up-status" id="step-up-status">ממתין לאישור הלקוח באפליקציה...</p>
+      <div id="step-up-actions" class="step-up-actions">
+        <button type="button" class="btn success" data-result="approved">✔ הלקוח אישר באפליקציה</button>
+        <button type="button" class="btn danger" data-result="failed">✖ הלקוח לא אישר / דחה</button>
+      </div>
+      <p id="step-up-result" class="step-up-result hidden"></p>
+    </div>
+  </div>
+
+  <details class="event-log">
+    <summary>יומן אירועי השיחה (Audit Trail חי)</summary>
+    <ul id="event-list"></ul>
+  </details>
+
+  <div id="call-controls">
+    <form method="POST" action="{{ url_for('finish_live_call', call_key=call_key) }}" id="finish-form">
+      <input type="hidden" name="agent_action" id="agent-action" value="continue">
+      <button type="submit" class="btn" id="finish-continue" data-action="continue">סיים שיחה - טיפול רגיל</button>
+      <button type="submit" class="btn danger" id="finish-escalate" data-action="escalate">עצור והסלם לבקרת הונאות</button>
+    </form>
+    <a class="btn secondary" href="{{ url_for('dashboard') }}">חזרה ללוח הבקרה</a>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='live_monitor.js') }}"></script>
+{% endblock %}

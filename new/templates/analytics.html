@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}ניתוח דפוסים ואיתור תקיפות{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>ניתוח דפוסים בשיחות שהתקבלו</h2>
+  <p class="hint">
+    מסך זה מנתח את כלל השיחות שתועדו במערכת (ידניות וסימולציות חיות כאחד),
+    ומאתר דפוסים שעשויים להעיד על ניסיון תקיפה מתואם על המוקד.
+  </p>
+
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="summary-number">{{ summary.total_calls }}</div>
+      <div class="summary-label">סה"כ שיחות שתועדו</div>
+    </div>
+    <div class="summary-card danger">
+      <div class="summary-number">{{ summary.high_count }}</div>
+      <div class="summary-label">שיחות בסיכון גבוה ({{ summary.high_pct }}%)</div>
+    </div>
+    <div class="summary-card warning">
+      <div class="summary-number">{{ summary.otp_count }}</div>
+      <div class="summary-label">שיחות עם אימות מוגבר (Step-Up)</div>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>מדדי הצלחה מהספרות</h2>
+  <p class="hint">כיול נכון צריך לאזן בין מניעת הונאה לבין זמן הטיפול ונוחות הלקוח. לכן המערכת מודדת גם False-Positive וגם זמן.</p>
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="summary-number">{{ kpis.false_positive_rate }}%</div>
+      <div class="summary-label">False-Positive - Step-Up שהלקוח האמיתי אישר<br><small>{{ kpis.step_up_approved }} מתוך {{ kpis.step_up_total }}</small></div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-number">{{ kpis.step_up_pass_rate }}%</div>
+      <div class="summary-label">שיעור השלמת Step-Up<br><small>אושר {{ kpis.step_up_approved }} / נכשל {{ kpis.step_up_failed }}</small></div>
+    </div>
+    {% for h in kpis.handle_by_level %}
+    <div class="summary-card">
+      <div class="summary-number">{{ h.avg_sec if h.avg_sec is not none else "-" }}<small>s</small></div>
+      <div class="summary-label">זמן טיפול ממוצע - רמה {{ h.level }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card">
+  <h2>התפלגות רמות סיכון</h2>
+  <canvas id="risk-distribution-chart" width="500" height="220"></canvas>
+</section>
+
+<section class="card">
+  <h2>האינדיקציות השכיחות ביותר</h2>
+  <p class="hint">אינדיקציה שחוזרת על עצמה בתדירות גבוהה עשויה להעיד על שיטת תקיפה נפוצה כרגע.</p>
+  <div class="indicator-bars">
+    {% set max_indicator_count = top_indicators[0].count if top_indicators else 1 %}
+    {% for item in top_indicators %}
+    <div class="indicator-row">
+      <div class="indicator-row-heading">
+        <span>{{ item.label }}</span><strong>{{ item.count }}</strong>
+      </div>
+      <div class="indicator-track">
+        <div class="indicator-fill" style="width: {{ (item.count / max_indicator_count * 100)|round }}%"></div>
+      </div>
+    </div>
+    {% else %}
+    <p class="hint">אין עדיין אינדיקציות שנצפו.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card">
+  <h2>לקוחות עם פניות חוזרות</h2>
+  <p class="hint">מספר פניות חריג לאותו חשבון בפרק זמן קצר יכול להעיד על ניסיון תקיפה חוזר על אותו יעד.</p>
+  <table>
+    <thead>
+      <tr><th>לקוח</th><th>מספר חשבון</th><th>מס' פניות</th><th>מתוכן בסיכון גבוה</th></tr>
+    </thead>
+    <tbody>
+      {% for row in repeat_targets %}
+      <tr>
+        <td>{{ row.full_name }}</td>
+        <td>{{ row.account_number or "-" }}</td>
+        <td>{{ row.call_count }}</td>
+        <td>{{ row.high_count or 0 }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4">אין עדיין לקוחות עם יותר משיחה אחת</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="card">
+  <h2>שיחות בסיכון גבוה אחרונות</h2>
+  <table>
+    <thead>
+      <tr><th>מס' שיחה</th><th>זמן</th><th>סוג</th><th>לקוח</th><th>נציג</th><th>ציון</th></tr>
+    </thead>
+    <tbody>
+      {% for row in recent_high_risk %}
+      <tr>
+        <td><a href="{{ url_for('call_result', call_id=row.call_id) }}">{{ row.call_id }}</a></td>
+        <td>{{ row.call_time }}</td>
+        <td>{{ "סימולציה חיה" if row.call_type == "live" else "תיעוד ידני" }}</td>
+        <td>{{ row.full_name }}</td>
+        <td>{{ row.agent_name }}</td>
+        <td>{{ row.total_score }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6">אין שיחות בסיכון גבוה עדיין</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<script type="application/json" id="analytics-data">
+  {{ {"risk_distribution": risk_distribution} | tojson }}
+</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='analytics_charts.js') }}"></script>
+{% endblock %}

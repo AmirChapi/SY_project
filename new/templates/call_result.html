@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}תוצאת הערכת סיכון{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>שיחה מספר {{ call.call_id }}
+    <span class="badge">{{ "סימולציה חיה" if call.call_type == "live" else "תיעוד ידני" }}</span>
+  </h2>
+  <p>לקוח: {{ call.full_name }} | טלפון: {{ call.phone or "-" }} | חשבון: {{ call.account_number or "-" }}</p>
+  <p>נציג: {{ call.agent_name }} | זמן שיחה: {{ call.call_time }}</p>
+  {% if call.notes %}<p>הערות: {{ call.notes }}</p>{% endif %}
+
+  <h3>אינדיקציות שנבדקו</h3>
+  <ul>
+    {% for ind in indicators %}
+      <li class="{{ 'active' if ind.is_present else 'inactive' }}">
+        {{ ind.indicator_label }} - {{ "זוהה" if ind.is_present else "לא זוהה" }} (משקל {{ ind.weight }})
+        {% if ind.is_present and ind.detected_phase %}
+          <small>· {{ "בשלב IVR" if ind.detected_phase == "ivr" else "בשיחה" }}{% if ind.detected_at_sec is not none %} · {{ ind.detected_at_sec }}s{% endif %}</small>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="result-box level-{{ assessment.risk_level }}">
+    <h3>ציון סיכון: {{ assessment.total_score }} / 100</h3>
+    <p>רמת סיכון: {{ assessment.risk_level }}</p>
+    <p>המלצה לנציג: {{ assessment.recommendation }}</p>
+  </div>
+
+  <div class="policy-panel">
+    <h3>פעולות שהיו מותרות ברמה זו</h3>
+    <ul>
+      {% for a in actions %}
+      <li class="{{ 'allowed' if a.allowed else 'blocked' }}">{{ "✔" if a.allowed else "✖" }} {{ a.label }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% if challenge %}
+  <div class="otp-box">
+    <h3>Step-Up Authentication</h3>
+    <p>ערוץ: אפליקציית הבנק (Push) - ערוץ רשום, בלתי-תלוי במספר המתקשר.</p>
+    <p>נשלח: {{ challenge.sent_at }} ·
+      תוצאה:
+      <strong class="step-up-result {{ challenge.result }}">
+        {{ {"approved": "הלקוח אישר - זהות אומתה", "failed": "הלקוח לא אישר - החשד התחזק", "pending": "לא הוכרע"}[challenge.result] }}
+      </strong>
+    </p>
+    <p class="hint">הקוד עצמו נשמר כ-hash בלבד ואינו מוצג. בסביבת production הוא נשלח אך ורק לערוץ הרשום.</p>
+  </div>
+  {% endif %}
+
+  <details class="event-log" open>
+    <summary>יומן ביקורת של השיחה ({{ audit_rows|length }} רשומות)</summary>
+    <ul>
+      {% for r in audit_rows %}
+      <li><span class="badge">{{ r.actor }}</span> {{ r.action }} - {{ r.details }}</li>
+      {% endfor %}
+    </ul>
+  </details>
+
+  <a class="btn" href="{{ url_for('dashboard') }}">לוח בקרה</a>
+  <a class="btn secondary" href="{{ url_for('calls_list') }}">רשימת שיחות</a>
+</section>
+{% endblock %}

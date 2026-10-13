@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}שיחה חדשה{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>פתיחת שיחה והערכת סיכון</h2>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  <form method="POST" id="call-form">
+    <label>שם הלקוח
+      <input type="text" name="customer_name" required value="{{ form.get('customer_name', '') }}">
+    </label>
+    <label>טלפון
+      <input type="text" name="phone" value="{{ form.get('phone', '') }}">
+    </label>
+    <label>מספר חשבון
+      <input type="text" name="account_number" value="{{ form.get('account_number', '') }}">
+    </label>
+    <label>שם הנציג
+      <input type="text" name="agent_name" required value="{{ form.get('agent_name', '') }}">
+    </label>
+
+    <fieldset>
+      <legend>אינדיקציות מהשיחה</legend>
+      {% for ind in indicators %}
+      <label class="checkbox">
+        <input type="checkbox" name="{{ ind.key }}" class="indicator-checkbox" data-key="{{ ind.key }}">
+        {{ ind.label }} (משקל {{ ind.weight }})
+      </label>
+      {% endfor %}
+    </fieldset>
+
+    <label>הערות
+      <textarea name="notes"></textarea>
+    </label>
+
+    <div id="live-score" class="live-score">
+      רמת סיכון משוערת (מתעדכן בזמן אמת): <strong><span id="score-value">0</span></strong>
+      (<span id="score-level">נמוך</span>)
+    </div>
+
+    <button type="submit" class="btn">שמור וחשב סיכון</button>
+  </form>
+</section>
+{% endblock %}
